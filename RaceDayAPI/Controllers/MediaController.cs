@@ -33,8 +33,7 @@ public sealed class MediaController : ControllerBase
     [HttpPost("events/{eventId:int}/banner")]
     [Authorize(Roles = "Organiser")]
     [RequestSizeLimit(MaxBytes + 65536)]
-    public async Task<IActionResult> EventBanner(
-    int eventId, IFormFile image)
+    public async Task<IActionResult> EventBanner(int eventId, IFormFile image)
     {
         var ev = await _db.Events.FirstOrDefaultAsync(e => e.EventID == eventId);
         if (ev == null) return NotFound(new { Message = "Event not found." });
@@ -49,8 +48,7 @@ public sealed class MediaController : ControllerBase
     [HttpPost("profile/picture")]
     [Authorize(Roles = "Participant")]
     [RequestSizeLimit(MaxBytes + 65536)]
-    public async Task<IActionResult> ProfilePicture(
-    IFormFile image)
+    public async Task<IActionResult> ProfilePicture(IFormFile image)
     {
         int userId = User.GetRaceDayUserId();
         var user = await _db.Users.FirstOrDefaultAsync(u => u.UserID == userId);
