@@ -1,0 +1,35 @@
+@model List<RaceEvent>
+@{
+    ViewData["Title"] = "Manage Events";
+}
+<div class="page-heading d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div><span class="eyebrow">ORGANISER</span><h1>Manage events</h1><p>Create events, set categories and monitor entries.</p></div>
+    <a asp-action="EventForm" class="btn btn-accent">+ New event</a>
+</div>
+<div class="panel table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Event</th><th>When</th><th>Type</th><th>Tools</th></tr></thead>
+        <tbody>
+        @foreach (var ev in Model)
+        {
+            <tr>
+                <td><strong>@ev.EventName</strong><div class="small text-muted">@ev.Location</div></td>
+                <td>@ev.EventDate.ToString("dd MMM yyyy")</td>
+                <td>@ev.EventType</td>
+                <td>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a class="btn btn-outline-dark btn-sm" asp-action="EventForm" asp-route-id="@ev.EventID">Edit</a>
+                        <a class="btn btn-outline-dark btn-sm" asp-action="Categories" asp-route-eventId="@ev.EventID">Categories</a>
+                        <a class="btn btn-outline-dark btn-sm" asp-action="Enrolments" asp-route-eventId="@ev.EventID">Entries</a>
+                        <a class="btn btn-outline-dark btn-sm" asp-action="Results" asp-route-eventId="@ev.EventID">Results</a>
+                        <form method="post" asp-action="DeleteEvent" onsubmit="return confirm('Delete this event? Events with related entries cannot be deleted.');">
+                            <input type="hidden" name="id" value="@ev.EventID" /><button class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <div class="empty-state">No events created. Start with your first event!</div> }
+</div>

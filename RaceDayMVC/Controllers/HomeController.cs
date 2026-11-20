@@ -1,32 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
 using RaceDayMVC.Models;
-using System.Diagnostics;
+using RaceDayMVC.Services;
 
-namespace RaceDayMVC.Controllers
+namespace RaceDayMVC.Controllers;
+
+public sealed class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly RaceDayApiClient _api;
+    public HomeController(RaceDayApiClient api) => _api = api;
+
+    public async Task<IActionResult> Index(string? type, string? search)
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        var response = await _api.GetAsync<List<RaceEvent>>("api/events");
+        var events = (response.Data ?? new()).Where(e => e.EventDate >= DateTime.Today);
+        if (!string.IsNullOrWhiteSpace(type))
+            events = events.Where(e => e.EventType.Equals(type, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(search))
+            events = events.Where(e => e.EventName.Contains(search, StringComparison.OrdinalIgnoreCase)
+                || e.Location.Contains(search, StringComparison.OrdinalIgnoreCase));
+        ViewBag.Type = type;
+        ViewBag.Search = search;
+        if (!response.Success) ViewBag.Error = response.Message;
+        return View(events.OrderBy(e => e.EventDate).ToList());
     }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var response = await _api.GetAsync<EventDetail>($"api/events/{id}");
+        if (!response.Success || response.Data == null)
+        {
+            TempData["Error"] = response.Message;
+            return RedirectToAction(nameof(Index));
+        }
+        return View(response.Data);
+    }
+
+    public IActionResult Error() => View();
 }

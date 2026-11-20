@@ -71,5 +71,7 @@ namespace RaceDayAPI.Models
         // Last date and time participants can register.
         // SQL: DATETIME NOT NULL
         public DateTime RegistrationDeadline { get; set; }
+        public decimal? DistanceKm { get; set; }
+        public string? BannerUrl { get; set; }
     }
 }

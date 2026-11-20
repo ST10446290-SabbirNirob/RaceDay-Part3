@@ -1,8 +1,51 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model List<RaceEvent>
+@{
+    ViewData["Title"] = "Upcoming Events";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">RUN · WALK · RIDE</span>
+        <h1>CHASE YOUR <span>NEXT FINISH LINE.</span></h1>
+        <p>Discover South Africa's upcoming races. Find your distance, join your community and make every kilometre count.</p>
+        <a class="btn btn-accent btn-lg" href="#events">Find a race →</a>
+    </div>
+    <div class="hero-symbol">🏁</div>
+</section>
+<section id="events" class="mt-5">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div><div class="eyebrow">EVENT CALENDAR</div><h2 class="section-title">Upcoming events</h2></div>
+        <span class="text-muted">@Model.Count event(s) found</span>
+    </div>
+    <form method="get" class="row g-2 filter-bar mb-4">
+        <div class="col-md-5"><input class="form-control" name="search" value="@ViewBag.Search" placeholder="Search name or location" /></div>
+        <div class="col-md-4"><select class="form-select" name="type">
+            <option value="">All sports</option>
+            @foreach (var type in new[] { "Running", "Walking", "Cycling" })
+            {
+                <option selected="@(ViewBag.Type == type)" value="@type">@type</option>
+            }
+        </select></div>
+        <div class="col-md-3"><button class="btn btn-dark w-100">Search events</button></div>
+    </form>
+    @if (ViewBag.Error != null) { <div class="alert alert-warning">@ViewBag.Error</div> }
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <article class="event-card h-100">
+                    <div class="event-cover" style="@(string.IsNullOrEmpty(item.BannerUrl) ? "" : "background-image:url('" + item.BannerUrl + "')")">
+                        @if (string.IsNullOrEmpty(item.BannerUrl)) { <span class="cover-icon">🏃</span> }
+                        <span class="sport-tag">@item.EventType</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="eyebrow">@item.EventDate.ToString("ddd, dd MMM yyyy")</div>
+                        <h3 class="h5 fw-bold mt-2">@item.EventName</h3>
+                        <p class="text-muted">📍 @item.Location</p>
+                        <a asp-action="Details" asp-route-id="@item.EventID" class="btn btn-outline-dark w-100">View event →</a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+    @if (Model.Count == 0) { <div class="empty-state">No upcoming events match your search. Check back soon!</div> }
+</section>

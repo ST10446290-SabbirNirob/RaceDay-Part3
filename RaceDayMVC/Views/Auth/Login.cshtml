@@ -1,0 +1,16 @@
+@model LoginForm
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="auth-card panel">
+    <span class="eyebrow">WELCOME BACK</span>
+    <h1 class="section-title">Log in to RaceDay</h1>
+    <p class="text-muted">Your next challenge is waiting.</p>
+    <form asp-action="Login" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="username" /></div>
+        <div class="mb-3"><label asp-for="Password" class="form-label"></label><input asp-for="Password" type="password" class="form-control" autocomplete="current-password" /></div>
+        <button class="btn btn-accent w-100">Log in</button>
+    </form>
+    <p class="mt-3 small">New here? <a asp-action="Register">Create an account</a></p>
+</div>

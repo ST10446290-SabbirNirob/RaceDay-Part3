@@ -1,0 +1,46 @@
+@model List<RaceCategory>
+@{
+    var ev = (RaceEvent)ViewBag.Event;
+    ViewData["Title"] = "Event Categories";
+}
+<a asp-action="Events" class="back-link">← Back to events</a>
+<div class="page-heading"><span class="eyebrow">@ev.EventName</span><h1>Race categories</h1><p>Add a distance or age category for this event.</p></div>
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="panel">
+            <h2 class="section-title h4">Available categories</h2>
+            <div class="table-responsive">
+            <table class="table">
+                <thead><tr><th>Category</th><th>Distance</th><th>Fee</th><th>Capacity</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var cat in Model)
+                {
+                    <tr>
+                        <td>@cat.CategoryName</td><td>@cat.DistanceKm km</td><td>R @cat.EntryFee</td><td>@cat.MaxParticipants</td>
+                        <td><form asp-action="DeleteCategory" method="post">
+                            <input type="hidden" name="id" value="@cat.CategoryID" />
+                            <input type="hidden" name="eventId" value="@ev.EventID" />
+                            <button class="btn btn-outline-danger btn-sm">Remove</button>
+                        </form></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            </div>
+            @if (Model.Count == 0) { <p class="text-muted">No categories yet.</p> }
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel">
+            <h2 class="section-title h4">Add a category</h2>
+            <form asp-action="AddCategory" method="post">
+                <input type="hidden" name="EventID" value="@ev.EventID" />
+                <div class="mb-3"><label class="form-label">Category name</label><input name="CategoryName" required maxlength="100" placeholder="e.g. Open 10 km / Over 40" class="form-control" /></div>
+                <div class="mb-3"><label class="form-label">Distance (km)</label><input name="DistanceKm" type="number" min="0.01" step="0.01" required class="form-control" /></div>
+                <div class="mb-3"><label class="form-label">Entry fee (R)</label><input name="EntryFee" type="number" min="0" step="0.01" required class="form-control" /></div>
+                <div class="mb-3"><label class="form-label">Maximum participants</label><input name="MaxParticipants" type="number" min="1" required class="form-control" value="100" /></div>
+                <button class="btn btn-accent w-100">Add category</button>
+            </form>
+        </div>
+    </div>
+</div>

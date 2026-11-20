@@ -30,7 +30,8 @@ public class UsersController : ControllerBase
                 LastName = u.LastName,
                 Email = u.Email,
                 Role = u.Role,
-                CreatedAt = u.CreatedAt
+                CreatedAt = u.CreatedAt,
+                ProfilePictureUrl = u.ProfilePictureUrl
             }).FirstOrDefaultAsync();
         return data == null ? NotFound() : Ok(data);
     }

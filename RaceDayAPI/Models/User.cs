@@ -46,5 +46,6 @@ namespace RaceDayAPI.Models
         // Date and time the account was created.
         // SQL: DATETIME NOT NULL DEFAULT GETDATE()
         public DateTime CreatedAt { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

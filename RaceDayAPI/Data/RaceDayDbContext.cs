@@ -98,6 +98,7 @@ namespace RaceDayAPI.Data
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("GETDATE()")
                     .IsRequired();
+                entity.Property(u => u.ProfilePictureUrl).HasColumnType("nvarchar(2048)");
 
                 // Email must be unique.
                 entity.HasAlternateKey(u => u.Email)
@@ -145,6 +146,8 @@ namespace RaceDayAPI.Data
                 entity.Property(e => e.RegistrationDeadline)
                     .HasColumnType("datetime")
                     .IsRequired();
+                entity.Property(e => e.DistanceKm).HasColumnType("decimal(6,2)");
+                entity.Property(e => e.BannerUrl).HasColumnType("nvarchar(2048)");
 
                 // Each Event belongs to one User (Organiser).
                 entity.HasOne<User>()

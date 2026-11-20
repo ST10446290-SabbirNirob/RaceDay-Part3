@@ -34,5 +34,6 @@ namespace RaceDayAPI.DTOs.Users
 
         // Date when the account was created.
         public DateTime CreatedAt { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

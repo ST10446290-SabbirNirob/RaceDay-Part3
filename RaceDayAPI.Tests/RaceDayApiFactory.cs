@@ -27,10 +27,11 @@ public sealed class RaceDayApiFactory : WebApplicationFactory<Program>
         });
         builder.ConfigureTestServices(services =>
         {
-            // Remove SQL Server options and replace them with an isolated in-memory DB.
+            // Remove SQL Server options and use an in-memory database.
             services.RemoveAll<DbContextOptions<RaceDayDbContext>>();
-            services.RemoveAll<IDbContextOptionsConfiguration<RaceDayDbContext>>();
-            services.AddDbContext<RaceDayDbContext>(options => options.UseInMemoryDatabase(_dbName));
+
+            services.AddDbContext<RaceDayDbContext>(options =>
+                options.UseInMemoryDatabase(_dbName));
         });
     }
 }

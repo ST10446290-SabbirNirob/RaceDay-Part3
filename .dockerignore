@@ -1,0 +1,11 @@
+**/.git
+**/.vs
+**/bin
+**/obj
+**/*.user
+**/*.suo
+**/*.zip
+**/TestResults
+docs
+RaceDayAPI
+RaceDayAPI.Tests

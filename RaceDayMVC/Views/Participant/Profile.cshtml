@@ -1,0 +1,35 @@
+@model RaceProfile
+@{
+    ViewData["Title"] = "My Profile";
+}
+<div class="page-heading"><span class="eyebrow">YOUR ACCOUNT</span><h1>My profile</h1><p>Keep your information up to date.</p></div>
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="panel">
+            <h2 class="section-title h4">Personal details</h2>
+            <form asp-action="Profile" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="mb-3"><label asp-for="FirstName" class="form-label">First name</label><input asp-for="FirstName" class="form-control" /></div>
+                <div class="mb-3"><label asp-for="LastName" class="form-label">Last name</label><input asp-for="LastName" class="form-control" /></div>
+                <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /></div>
+                <div class="mb-3"><label class="form-label">Role</label><input class="form-control" value="@Model.Role" readonly /></div>
+                <button class="btn btn-accent">Save changes</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel text-center">
+            @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl))
+            {
+                <img src="@Model.ProfilePictureUrl" alt="Profile picture" class="rounded-circle mb-3" style="width:150px;height:150px;object-fit:cover" />
+            }
+            else { <div style="font-size:5rem">🏃</div> }
+            <h2 class="h5 fw-bold">Profile picture</h2>
+            <form asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+                <input type="file" name="image" accept="image/png,image/jpeg,image/webp" class="form-control mb-2" required />
+                <div class="text-muted small mb-3">JPG, PNG or WebP. Maximum 5 MB.</div>
+                <button class="btn btn-dark">Upload picture</button>
+            </form>
+        </div>
+    </div>
+</div>

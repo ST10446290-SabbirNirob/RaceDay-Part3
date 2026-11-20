@@ -1,0 +1,35 @@
+@model List<RaceEnrolment>
+@{
+    var ev = (RaceEvent)ViewBag.Event;
+    ViewData["Title"] = "Enrolments";
+}
+<a asp-action="Events" class="back-link">← Back to events</a>
+<div class="page-heading"><span class="eyebrow">@ev.EventName</span><h1>Enrolments</h1><p>@Model.Count participant(s) registered.</p></div>
+<div class="panel table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Participant</th><th>Category</th><th>Race number</th><th>Status</th><th>Update</th></tr></thead>
+        <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td><strong>@entry.FirstName @entry.LastName</strong><div class="small text-muted">@entry.Email</div></td>
+                <td>@entry.CategoryName</td><td>@entry.RaceNumber</td>
+                <td><span class="badge badge-@entry.Status.ToLowerInvariant()">@entry.Status</span></td>
+                <td>
+                    <form asp-action="UpdateStatus" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="id" value="@entry.EnrolmentID" />
+                        <input type="hidden" name="eventId" value="@ev.EventID" />
+                        <select class="form-select form-select-sm" name="status">
+                            <option selected="@(entry.Status == "Confirmed")">Confirmed</option>
+                            <option selected="@(entry.Status == "Pending")">Pending</option>
+                            <option selected="@(entry.Status == "Cancelled")">Cancelled</option>
+                        </select>
+                        <button class="btn btn-dark btn-sm">Save</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    @if (Model.Count == 0) { <p class="text-muted">Nobody has enrolled yet.</p> }
+</div>

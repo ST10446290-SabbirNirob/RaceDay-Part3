@@ -22,6 +22,9 @@ public class EventWriteDto : IValidatableObject
     [Required]
     public DateTime RegistrationDeadline { get; set; }
 
+    [Range(typeof(decimal), "0.01", "9999.99")]
+    public decimal? DistanceKm { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext context)
     {
         if (EventDate == default || RegistrationDeadline == default)

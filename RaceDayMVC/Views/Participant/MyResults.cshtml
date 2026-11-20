@@ -1,0 +1,26 @@
+@model List<RaceResult>
+@{
+    ViewData["Title"] = "My Results";
+}
+<div class="page-heading"><span class="eyebrow">YOUR RACE HISTORY</span><h1>My results</h1><p>Every finish line, a new achievement.</p></div>
+<div class="row g-4">
+    @foreach (var result in Model)
+    {
+        <div class="col-lg-6">
+            <article class="panel h-100">
+                <div class="eyebrow">@result.EventDate.ToString("dd MMM yyyy")</div>
+                <h2 class="h4 section-title mt-2">@result.EventName</h2>
+                <div class="text-muted mb-3">@result.CategoryName</div>
+                <div class="row g-2">
+                    <div class="col-6"><div class="small text-muted">Finish time</div><strong class="h4">@result.FinishTime.ToString(@"hh\:mm\:ss")</strong></div>
+                    <div class="col-6"><div class="small text-muted">Overall position</div>
+                        <strong class="h4">@(result.OverallPosition?.ToString() ?? "—")</strong>
+                        @if (result.TotalFinishers > 0) { <span class="small text-muted">of @result.TotalFinishers finishers</span> }
+                    </div>
+                    <div class="col-12"><div class="small text-muted">Category position</div><strong>@(result.CategoryPosition?.ToString() ?? "Pending")</strong></div>
+                </div>
+            </article>
+        </div>
+    }
+</div>
+@if (Model.Count == 0) { <div class="empty-state">No race results yet. Once your Organiser publishes results, they will appear here.</div> }

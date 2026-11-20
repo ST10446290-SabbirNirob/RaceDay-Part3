@@ -60,7 +60,8 @@ public class EventsController : ControllerBase
             EventDate = request.EventDate,
             Location = request.Location.Trim(),
             EventType = NormalizeType(request.EventType),
-            RegistrationDeadline = request.RegistrationDeadline
+            RegistrationDeadline = request.RegistrationDeadline,
+            DistanceKm = request.DistanceKm
         };
         _db.Events.Add(ev);
         await _db.SaveChangesAsync();
@@ -83,6 +84,7 @@ public class EventsController : ControllerBase
         ev.Location = request.Location.Trim();
         ev.EventType = NormalizeType(request.EventType);
         ev.RegistrationDeadline = request.RegistrationDeadline;
+        ev.DistanceKm = request.DistanceKm;
         await _db.SaveChangesAsync();
         return Ok(ev);
     }

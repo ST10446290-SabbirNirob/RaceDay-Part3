@@ -1,0 +1,35 @@
+@model OrganiserDashboard
+@{
+    ViewData["Title"] = "Organiser Dashboard";
+}
+<div class="page-heading d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div><span class="eyebrow">ORGANISER CONTROL CENTRE</span><h1>Your race dashboard</h1><p>Plan events, manage entries and publish results.</p></div>
+    <a class="btn btn-accent" asp-action="EventForm">+ Create event</a>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="metric"><span>Total events</span><strong>@Model.Events.Count</strong></div></div>
+    <div class="col-md-4"><div class="metric"><span>Total enrolments</span><strong>@Model.TotalEnrolments</strong></div></div>
+    <div class="col-md-4"><div class="metric"><span>Upcoming events</span><strong>@Model.UpcomingEvents</strong></div></div>
+</div>
+<div class="panel">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-title h4">Your events</h2>
+        <a asp-action="Events">Manage all →</a>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Event</th><th>Date</th><th>Entries</th><th>Actions</th></tr></thead>
+        <tbody>
+        @foreach (var ev in Model.Events)
+        {
+            <tr>
+                <td><strong>@ev.EventName</strong><div class="text-muted small">@ev.Location</div></td>
+                <td>@ev.EventDate.ToString("dd MMM yyyy")</td><td>@ev.EnrolmentCount</td>
+                <td><a asp-action="Enrolments" asp-route-eventId="@ev.EventID">Enrolments</a> · <a asp-action="Results" asp-route-eventId="@ev.EventID">Results</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    </div>
+    @if (Model.Events.Count == 0) { <p class="text-muted">You haven't created any events yet.</p> }
+</div>
